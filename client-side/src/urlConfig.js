@@ -1,4 +1,4 @@
-export const api = 'http://localhost:9090/api';
+export const api = 'https://bookingdotin.onrender.com/api';
 export const getPublicURL = (filename) => {
-    return `http://localhost:9090/public/${filename}`;
+    return `https://bookingdotin.onrender.com/public/${filename}`;
 }
