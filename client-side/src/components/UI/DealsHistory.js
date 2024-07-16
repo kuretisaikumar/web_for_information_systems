@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, Table } from 'react-bootstrap';
 import { isEmpty } from '../../helpers/isObjEmpty';
+import dayjs from 'dayjs';
 
 const DealsHistory = (props) => {
     return (
@@ -36,9 +37,9 @@ const DealsHistory = (props) => {
                                     const { date_added, venueName, eventDate, bill } = deal;
                                     return (
                                         <tr>
-                                            <td>{date_added}</td>
+                                            <td>{dayjs(date_added).format('DD-MMM-YYYY')}</td>
                                             <td>{venueName}</td>
-                                            <td>{eventDate}</td>
+                                            <td>{dayjs(eventDate).format('DD-MMM-YYYY')}</td>
                                             <td>{bill}</td>
                                             <td>
                                                 <Button size="sm">Details</Button>

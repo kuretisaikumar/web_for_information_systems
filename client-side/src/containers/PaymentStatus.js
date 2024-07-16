@@ -10,6 +10,7 @@ const PaymentStatus = () => {
 
     useEffect(() => {
         const query = new URLSearchParams(window.location.search);
+        console.log(query);
         if (query.get("success")) {
             dispatch(paymentSuccess(JSON.parse(localStorage.getItem("dealId"))));
             setCheckoutMessage("Booking confirmed 😇 !!")

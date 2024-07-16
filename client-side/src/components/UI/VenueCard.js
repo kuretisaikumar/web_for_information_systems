@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { getOneVenue } from '../../actions/venue.actions';
-import { getPublicURL } from '../../urlConfig';
+import { api, getPublicURL } from '../../urlConfig';
 import { ImgsCard } from './ImgsCard';
 import { useDispatch, useSelector } from 'react-redux';
 import BookingModel from './BookingModel';
+import axiosInstance from '../../helpers/axios';
+// import axios from 'axios';
 
 const VenueCard = (props) => {
 
@@ -17,6 +19,13 @@ const VenueCard = (props) => {
     const dispatch = useDispatch()
     const getVenueInfo = () => {
         dispatch(getOneVenue(_id));
+    }
+
+    const handleDeleteVenue = () => {
+        console.log(props,_id);
+        axiosInstance.post('/venue-delete/'+ _id).then((res)=>{
+            alert("Venue deleted successfully");
+        });
     }
 
     return (
@@ -41,7 +50,7 @@ const VenueCard = (props) => {
                     </Link>
                     {
                         isDelete === true ?
-                            <Button variant="danger" size="sm">Delete</Button>
+                            <Button variant="danger" size="sm" onClick={() => handleDeleteVenue()}>Delete</Button>
                             :
                             auth.user.role === 'dealer' ?
                                 <></>
