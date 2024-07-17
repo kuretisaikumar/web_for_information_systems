@@ -108,7 +108,7 @@ const AddVenueModel = (props) => {
                                 <Input
                                     label='Price'
                                     type='number'
-                                    placeholder='Price in EURO'
+                                    placeholder='Price in Indian Rupee'
                                     value={price}
                                     onChange={(e) => setPrice(e.target.value)}
                                 />

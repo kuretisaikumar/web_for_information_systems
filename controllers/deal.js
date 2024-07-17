@@ -5,27 +5,25 @@ const checkout = async (req, res) => {
     const { venueId, eventDate, bill, venueName, venueOwnerId } = req.body;
 
     try {
-        // const session = await stripe.checkout.sessions.create({
-        //     payment_method_types: ['card'],
-        //     mode: 'payment',
-        //     success_url: `${process.env.global_client_url}/payment-status?success=true`,
-        //     cancel_url: `${process.env.global_client_url}/payment-status?canceled=true`,
-        //     line_items: [
-        //         {
-        //             price_data: {
-        //                 currency: 'inr',
-        //                 product_data: {
-        //                     name: venueName
-        //                 },
-        //                 unit_amount: bill * 100
-        //             },
-        //             quantity: 1
-        //         }
-        //     ]
-        // })
-        const payment = true;
-        // bypassing payment
-        if (payment) {
+        const session = await stripe.checkout.sessions.create({
+            payment_method_types: ['card'],
+            mode: 'payment',
+            success_url: `${process.env.global_client_url}/payment-status?success=true`,
+            cancel_url: `${process.env.global_client_url}/payment-status?canceled=true`,
+            line_items: [
+                {
+                    price_data: {
+                        currency: 'inr',
+                        product_data: {
+                            name: venueName
+                        },
+                        unit_amount: bill * 100
+                    },
+                    quantity: 1
+                }
+            ]
+        })
+        if (session) {
             const deal = new Deal({
                 venueId, eventDate, venueName, venueOwnerId,
                 bill: bill,
@@ -33,7 +31,7 @@ const checkout = async (req, res) => {
             });
             deal.save((error, _deal) => {
                 if (error) return res.status(400).json({ msg: "Something went wrong", error });
-                if (_deal) return res.status(201).json({ url: 'Confirm Payment', dealId: _deal._id })
+                if (_deal) return res.status(201).json({ url: session.url, dealId: _deal._id })
             })
         } else {
             res.status(400).json({ msg: `session not created` })

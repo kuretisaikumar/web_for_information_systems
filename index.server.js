@@ -26,7 +26,6 @@ app.use('/api', dealsRoutes);
 
 // mongodb connection
 const connectDB = (dburl) => {
-    console.log("URL:: ",dburl);
     return mongoose.connect(dburl, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
