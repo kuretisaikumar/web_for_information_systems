@@ -47,7 +47,7 @@ const VenuePage = (props) => {
                         <div className="col-md-6">
                             <p style={{ fontSize: "22px" }}><strong>{venueName}</strong></p>
                             <p className="mb-2 text-muted text-uppercase small">{category}</p>
-                            <p style={{ fontSize: "22px" }}><span className="mr-1" style={{ fontSize: "22px" }}><strong>₹ {price}</strong></span></p>
+                            <p style={{ fontSize: "22px" }}><span className="mr-1" style={{ fontSize: "22px" }}><strong>€ {price}</strong></span></p>
                             <hr></hr>
                             <p className="pt-1">
                                 <h5>Some words from Dealer -</h5>

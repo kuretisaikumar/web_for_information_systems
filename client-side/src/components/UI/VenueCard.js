@@ -40,7 +40,7 @@ const VenueCard = (props) => {
                 <h6 className="card-subtitle mb-2 text-muted">{category}</h6>
                 <div className="d-flex justify-content-between align-items-center">
                     <h5 className="card-title">{venueName}</h5>
-                    <h5 className="card-title">₹ {price}</h5>
+                    <h5 className="card-title">€ {price}</h5>
                 </div>
                 <h6 className="card-subtitle mb-2 text-muted">{location}, {address}</h6>
 
