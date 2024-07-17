@@ -85,10 +85,22 @@ const checkAvailability = (req, res) => {
         })
 }
 
+const deleteVenueById = (req, res) => {
+    const {venueId} = req.params;
+    console.log(venueId);
+    Venue.deleteOne({_id: venueId}).then((deletedVenue)=> {
+        console.log("VENUE DELETED");
+        return res.status(200).json({msg: "Venue Deleted Successfully"});
+    }).catch((err)=>{
+        return res.status(400).json({msh: 'Unable to delete the venue', err});
+    })
+}
+
 module.exports = {
     createVenue,
     getVenueByVenueId,
     getAllVenuesByOwnerId,
     getAllVenues,
-    checkAvailability
+    checkAvailability,
+    deleteVenueById,
 }
