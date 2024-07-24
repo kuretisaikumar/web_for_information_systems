@@ -51,13 +51,13 @@ const updateVenue = (form,id) => {
     }
 }
 
-const getVenues = () => {
+const getVenues = (query) => {
     return async (dispatch) => {
         dispatch({
             type: venueConstants.GETALL_VENUES_REQUEST
         });
 
-        const res = await axios.get(`/all-venues`);
+        const res = await axios.get(`/all-venues`, { params: { query } });
 
         if (res.status === 200) {
             dispatch({

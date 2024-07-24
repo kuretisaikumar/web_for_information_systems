@@ -67,7 +67,17 @@ const getAllVenuesByOwnerId = async (req, res) => {
 }
 
 const getAllVenues = async (req, res) => {
-    const allVenues = await Venue.find({});
+    const { query } = req.query;
+    const searchQuery = new RegExp(query, 'i');
+    const allVenues = await Venue.find({
+        $or: [
+            { venueName: searchQuery },
+            { location: searchQuery },
+            { address: searchQuery },
+            { category: searchQuery }
+        ]
+    });
+
     if (allVenues) return res.status(200).json({ allVenues });
     else return res.status(400).json({ msg: `Something happend while fectching all venues` });
 }

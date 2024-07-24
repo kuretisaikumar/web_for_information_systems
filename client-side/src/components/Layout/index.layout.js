@@ -1,16 +1,16 @@
 import React from 'react'
 import { NavLink, Link } from 'react-router-dom'
-import { Navbar, Container, Nav, Button } from 'react-bootstrap';
+import { Navbar, Container, Nav, Button, Form } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { signout } from '../../actions/auth.actions';
 import { userInfo } from '../../actions/userInfo.actions';
-import { getOwnerVenues } from '../../actions/venue.actions';
+import { getOwnerVenues, getVenues } from '../../actions/venue.actions';
 import getDeals from '../../actions/dealsHistory.actions';
 import Avatar from 'boring-avatars';
 import './layout.style.css';
 
 const Layout = (props) => {
-
+    const [query, setQuery] = useState("");
     const auth = useSelector(state => state.auth);
     const serverStatus = useSelector(state => state.serverStatus);
     const dispatch = useDispatch();
@@ -18,6 +18,19 @@ const Layout = (props) => {
     const logout = () => {
         dispatch(signout());
     }
+    const handleChange = (e) => {
+        if (e.target.value === "") {
+          setQuery("");
+          handleSearch();
+        }else
+        {
+          setQuery(e.target.value);
+        }
+      };
+    
+      const handleSearch = () => {
+        dispatch(getVenues(query));
+      };
 
     const getUserInfo = () => {
         const { _id, role } = auth.user;
@@ -77,6 +90,18 @@ const Layout = (props) => {
                 <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" style={{ marginBottom: "15px" }}>
                     <Container>
                         <Link to={`/`} className="navbar-brand">🏡Booking.in</Link>
+                        <Form inline className="d-flex justify-content-center mx-auto w-100">
+              <Form.Control
+                type="text"
+                placeholder="Search by name, location, address, category"
+                value={query}
+                onChange={handleChange}
+                className=" w-50"
+              />
+              <Button variant="primary" onClick={handleSearch}>
+                Search
+              </Button>
+            </Form>
                         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                         <Navbar.Collapse id="responsive-navbar-nav">
                             <Nav className="me-auto"></Nav>
