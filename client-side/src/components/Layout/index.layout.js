@@ -29,11 +29,11 @@ const Layout = (props) => {
     }
 
     const LoggedInLinks = (props) => {
-        const { _id } = auth.user;
+        const { _id, role } = auth.user;
         return (
             <Nav className="test">
                 <li className="nav-item">
-                    <Link to={`/profile/${_id}`} className="nav-link" onClick={getUserInfo} style={{ textTransform: 'capitalize' }}>
+                    <Link to={role === 'admin' ? '/dashboard' : `/profile/${_id}`} className="nav-link" onClick={getUserInfo} style={{ textTransform: 'capitalize' }}>
                         <div style={{ display: "flex", alignItems: "center" }}>
                             <div className="avatar-border">
                                 <Avatar

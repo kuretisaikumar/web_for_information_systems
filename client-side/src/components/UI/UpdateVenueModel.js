@@ -1,47 +1,75 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
 import Input from './Input';
-import { addVenue } from '../../actions/venue.actions';
+import { updateVenue } from '../../actions/venue.actions';
 import { useDispatch, useSelector } from 'react-redux';
 import MessageBox from './MessageBox';
 import categories from '../../assets/data/categories'
+import axios from 'axios';
 
-const AddVenueModel = (props) => {
+const UpdateVenueModel = (props) => {
 
     const dispatch = useDispatch();
-    const addVenueStatus = useSelector(state => state.addVenueStatus);
-
-    const [venueName, setVenueName] = useState('');
-    const [location, setLocation] = useState('');
-    const [address, setAddress] = useState('');
-    const [description, setDescription] = useState('');
-    const [price, setPrice] = useState('');
-    const [category, setCategory] = useState('');
-    const [venuePictures, setVenuePictures] = useState([]);
+    const updateVenueStatus = useSelector(state => state.updateVenueStatus);
+    const oneVenueInfo = useSelector(state => state.oneVenueInfo);
+    const { _id, venueName, description, address, location, category, price, venuePictures, ownerInfo, ownerId } = oneVenueInfo.venue;
+    // const [venueName, setVenueName] = useState('');
+    // const [location, setLocation] = useState('');
+    // const [address, setAddress] = useState('');
+    // const [description, setDescription] = useState('');
+    // const [price, setPrice] = useState('');
+    // const [category, setCategory] = useState('');
+    const [updatedVenuePictures, setUpdatedVenuePictures] = useState([]);
     const [messageModalShow, setMessageModalShow] = useState(false);
+    const [updatedData, setUpdatedData] = useState({
+        venueName: venueName,
+        location: location,
+        description: description,
+        address: address,
+        category: category,
+        price: price
+    })
+
+    useEffect(()=>{
+        setUpdatedData({
+            venueName: venueName,
+            location: location,
+            description: description,
+            address: address,
+            category: category,
+            price: price
+        });
+    },[oneVenueInfo])
 
     const handleVenuePictures = (e) => {
-        setVenuePictures([
+        setUpdatedVenuePictures([
             ...venuePictures,
             e.target.files[0]
         ])
     }
 
-    const saveVenue = (e) => {
+    const handleOnchange = (key,value) => {
+        setUpdatedData((data)=>({
+            ...data,
+            [key]: value
+        }))
+    }
+
+    const handleSUbmit = async (e) => {
         e.preventDefault();
         const form = new FormData();
-        form.append('venueName', venueName);
-        form.append('location', location);
-        form.append('address', address);
-        form.append('description', description);
-        form.append('price', price);
-        form.append('category', category);
+        form.append('venueName', updatedData.venueName);
+        form.append('location', updatedData.location);
+        form.append('address', updatedData.address);
+        form.append('description', updatedData.description);
+        form.append('price', updatedData.price);
+        form.append('category', updatedData.category);
 
-        for (let picture of venuePictures) {
-            form.append('venuePicture', picture);
-        }
+        // for (let picture of venuePictures) {
+        //     form.append('venuePicture', picture);
+        // }
         console.log(form);
-        dispatch(addVenue(form));
+        dispatch(updateVenue(form,_id));
         setMessageModalShow(true);
     }
 
@@ -50,7 +78,7 @@ const AddVenueModel = (props) => {
             <MessageBox
                 show={messageModalShow}
                 onHide={() => setMessageModalShow(false)}
-                message={addVenueStatus.message}
+                message={updateVenueStatus.message}
             />
             <Modal
                 {...props}
@@ -60,20 +88,20 @@ const AddVenueModel = (props) => {
             >
                 <Modal.Header >
                     <Modal.Title id="contained-modal-title-vcenter">
-                        🆕Add New Venue
+                        Update Venue
                     </Modal.Title>
                     <Button onClick={props.onHide} >X</Button>
                 </Modal.Header>
                 <Modal.Body>
-                    <Form onSubmit={saveVenue}>
+                    <Form onSubmit={handleSUbmit}>
                         <Row>
                             <Col md={6}>
                                 <Input
                                     label='Venue Name'
                                     type='text'
                                     placeholder='Name of venue'
-                                    value={venueName}
-                                    onChange={(e) => setVenueName(e.target.value)}
+                                    value={updatedData.venueName}
+                                    onChange={(e) => handleOnchange('venueName',e.target.value)}
                                 />
                             </Col>
                             <Col md={6}>
@@ -81,8 +109,8 @@ const AddVenueModel = (props) => {
                                     label='Location'
                                     type='text'
                                     placeholder='Location'
-                                    value={location}
-                                    onChange={(e) => setLocation(e.target.value)}
+                                    value={updatedData.location}
+                                    onChange={(e) => handleOnchange('location',e.target.value)}
                                 />
                             </Col>
                         </Row>
@@ -90,8 +118,8 @@ const AddVenueModel = (props) => {
                             label='Address'
                             type='text'
                             placeholder='Area, Street Name'
-                            value={address}
-                            onChange={(e) => setAddress(e.target.value)}
+                            value={updatedData.address}
+                            onChange={(e) => handleOnchange('address',e.target.value)}
                         />
                         <Form.Group className="mb-3">
                             <Form.Label>Description</Form.Label>
@@ -99,8 +127,8 @@ const AddVenueModel = (props) => {
                                 as="textarea"
                                 rows={3}
                                 placeholder='Keep it under 30 words'
-                                value={description}
-                                onChange={(e) => setDescription(e.target.value)}
+                                value={updatedData.description}
+                                onChange={(e) => handleOnchange('description',e.target.value)}
                             />
                         </Form.Group>
                         <Row>
@@ -109,14 +137,14 @@ const AddVenueModel = (props) => {
                                     label='Price'
                                     type='number'
                                     placeholder='Price in Dollar'
-                                    value={price}
-                                    onChange={(e) => setPrice(e.target.value)}
+                                    value={updatedData.price}
+                                    onChange={(e) => handleOnchange('price', e.target.value)}
                                 />
                             </Col>
                             <Col md={6}>
                                 <Form.Group className="mb-3">
                                     <Form.Label>Category</Form.Label>
-                                    <select class="form-select" value={category} required onChange={(e) => setCategory(e.target.value)}>
+                                    <select class="form-select" value={updatedData.category} required onChange={(e) => handleOnchange('category',e.target.value)}>
                                         <option selected>-Select-</option>
                                         {
                                             categories.map((category) => {
@@ -130,7 +158,7 @@ const AddVenueModel = (props) => {
                             </Col>
                         </Row>
 
-                        <div class="mb-3">
+                        {/* <div class="mb-3">
                             <label for="formFile" class="form-label">Venue Pictures</label>
                             <input class="form-control" type="file" id="formFile" onChange={handleVenuePictures} />
                         </div>
@@ -143,10 +171,10 @@ const AddVenueModel = (props) => {
                                         <p className="text-muted">{picture.name}</p>
                                     )
                                 }) : null
-                        }
+                        } */}
 
-                        <Button variant="success" type="submit" style={{ marginRight: '10px' }} onClick={props.onHide}>Add +</Button>
-                        <Button variant="danger" type="reset" style={{ marginLeft: '10px' }}>Reset</Button>
+                        <Button variant="success" type="submit" style={{ marginRight: '10px' }} onClick={props.onHide}>Update</Button>
+                        <Button variant="danger" type="reset" style={{ marginLeft: '10px' }} onClick={()=> props.onHide()}>Close</Button>
                     </Form>
                 </Modal.Body>
             </Modal>
@@ -154,4 +182,4 @@ const AddVenueModel = (props) => {
     )
 }
 
-export default AddVenueModel
+export default UpdateVenueModel

@@ -1,4 +1,4 @@
-import { venueConstants, addVenueConstants } from "./constants";
+import { venueConstants, updateVenueConstants, addVenueConstants } from "./constants";
 import axios from '../helpers/axios';
 
 const addVenue = (form) => {
@@ -17,6 +17,31 @@ const addVenue = (form) => {
         } else {
             dispatch({
                 type: addVenueConstants.ADD_VENUE_FAILURE,
+                payload: {
+                    msg: res.data.msg,
+                    error: res.data.error
+                }
+            });
+        }
+    }
+}
+
+const updateVenue = (form,id) => {
+    return async (dispatch) => {
+        dispatch({
+            type: updateVenueConstants.UPDATE_VENUE_REQUEST
+        });
+
+        const res = await axios.post(`/venue-update/`+ id, form);
+
+        if (res.status === 200) {
+            dispatch({
+                type: updateVenueConstants.UPDATE_VENUE_SUCCESS,
+                payload: res.data._venue
+            });
+        } else {
+            dispatch({
+                type: updateVenueConstants.UPDATE_VENUE_FAILURE,
                 payload: {
                     msg: res.data.msg,
                     error: res.data.error
@@ -105,5 +130,6 @@ export {
     addVenue,
     getVenues,
     getOneVenue,
-    getOwnerVenues
+    getOwnerVenues,
+    updateVenue
 }

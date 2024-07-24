@@ -34,6 +34,7 @@ const ProfilePage = (props) => {
             </Layout>
         );
     }
+    
 
     const { fullName, email, contactNumber, role, username, createdAt } = userInfo.user;
 

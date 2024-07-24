@@ -19,6 +19,7 @@ const clientMiddleware = (req, res, next) => {
     }
     next();
 }
+
 const dealerMiddleware = (req, res, next) => {
     if (req.user.role !== 'dealer') {
         res.status(400).json({
@@ -28,8 +29,38 @@ const dealerMiddleware = (req, res, next) => {
     next();
 }
 
+const adminMiddleware = (req, res, next) => {
+    if (req.user.role !== 'admin') {
+        res.status(400).json({
+            msg: 'Dealer access denide'
+        })
+    }
+    next();
+}
+const dealerOrAdminMiddleware = (req, res, next) => {
+    if (req.user.role === 'dealer' || req.user.role === 'admin') {
+        next();
+    }else{
+        res.status(400).json({
+            msg: 'Access Denied'
+        })
+    }
+}
+
+const clientOrAdminMiddleware = (req, res, next) => {
+    if (req.user.role === 'client' || req.user.role === 'admin') {
+        next();
+    }else{
+        res.status(400).json({
+            msg: 'Access Denied'
+        })
+    }
+}
 module.exports = {
     requireSignIn,
     clientMiddleware,
-    dealerMiddleware
+    dealerMiddleware,
+    dealerOrAdminMiddleware,
+    adminMiddleware,
+    clientOrAdminMiddleware
 }

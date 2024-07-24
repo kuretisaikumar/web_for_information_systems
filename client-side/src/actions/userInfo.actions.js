@@ -8,7 +8,7 @@ const userInfo = (_id, userType) => {
         });
 
         let res = {};
-        if (userType === 'client') {
+        if (userType === 'client' || userType === 'admin') {
             res = await axios.get(`/user/${_id}`);
         }
         if (userType === 'dealer') {

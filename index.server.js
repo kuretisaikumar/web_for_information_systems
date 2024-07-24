@@ -17,12 +17,13 @@ const dealerAuthRoutes = require('./routes/dealer.auth');
 const clientAuthRoutes = require('./routes/client.auth');
 const venueRoutes = require('./routes/venue');
 const dealsRoutes = require('./routes/deal');
-
-app.use(express.static(path.join(__dirname , "public") ));
+const adminRoutes = require('./routes/admin');
+app.use(express.static(path.join(__dirname , "public") ));
 app.use('/api', dealerAuthRoutes);
 app.use('/api', clientAuthRoutes);
 app.use('/api', venueRoutes);
 app.use('/api', dealsRoutes);
+app.use('/api/admin', adminRoutes);
 
 // mongodb connection
 const connectDB = (dburl) => {

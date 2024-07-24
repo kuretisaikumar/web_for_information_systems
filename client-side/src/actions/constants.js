@@ -39,6 +39,12 @@ const addVenueConstants = {
     ADD_VENUE_SUCCESS: 'ADD_VENUE_SUCCESS',
 }
 
+const updateVenueConstants = {
+    UPDATE_VENUE_REQUEST: 'UPDATE_VENUE_REQUEST',
+    UPDATE_VENUE_FAILURE: 'UPDATE_VENUE_FAILURE',
+    UPDATE_VENUE_SUCCESS: 'UPDATE_VENUE_SUCCESS',
+}
+
 const dealsConstants = {
     GET_DEALS_REQUEST: 'DEALS_REQUEST',
     GET_DEALS_FAILURE: 'DEALS_FAILURE',
@@ -69,6 +75,7 @@ export {
     dealsConstants,
     saveDealConstants,
     deleteDealConstants,
-    serverConstants
+    serverConstants,
+    updateVenueConstants
 }
 

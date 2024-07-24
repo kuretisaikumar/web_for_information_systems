@@ -8,6 +8,7 @@ import { isUserLoggedIn } from './actions/auth.actions';
 import Signup from './containers/Signup';
 import ProfilePage from './containers/Profile';
 import VenuePage from './containers/Venue';
+import Dashboard from './containers/Dashboard';
 import { PaymentStatus } from './containers/PaymentStatus';
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
         <Route path="/" exact component={Home} />
         <Route path="/signin" component={Signin} />
         <Route path="/signup" component={Signup} />
+        <PrivateRoute path="/dashboard" component={Dashboard} />
         <PrivateRoute path="/profile/:id" component={ProfilePage} />
         <Route path="/venue/:id" component={VenuePage} />
         <Route path="/payment-status" component={PaymentStatus} />

@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { getOneVenue } from '../../actions/venue.actions';
+import { getOneVenue, getVenues } from '../../actions/venue.actions';
 import { api, getPublicURL } from '../../urlConfig';
 import { ImgsCard } from './ImgsCard';
 import { useDispatch, useSelector } from 'react-redux';
 import BookingModel from './BookingModel';
 import axiosInstance from '../../helpers/axios';
+import UpdateVenueModel from './UpdateVenueModel';
 // import axios from 'axios';
 
 const VenueCard = (props) => {
 
     const [bookingModalShow, setBookingModalShow] = useState(false);
+    const [showUpdateVenueModal, setShowUpdateVenueModal] = useState(false);
     const { img1, img2, category, venueName, ownerId, _id, price, location, address, style, isDelete } = props;
 
     const auth = useSelector(state => state.auth);
@@ -25,7 +27,13 @@ const VenueCard = (props) => {
         console.log(props,_id);
         axiosInstance.post('/venue-delete/'+ _id).then((res)=>{
             alert("Venue deleted successfully");
+            dispatch(getVenues())
         });
+    }
+
+    const handleUpdate = () => {
+        dispatch(getOneVenue(_id));
+        setShowUpdateVenueModal(true)
     }
 
     return (
@@ -40,7 +48,7 @@ const VenueCard = (props) => {
                 <h6 className="card-subtitle mb-2 text-muted">{category}</h6>
                 <div className="d-flex justify-content-between align-items-center">
                     <h5 className="card-title">{venueName}</h5>
-                    <h5 className="card-title">€ {price}</h5>
+                    <h5 className="card-title">${price}</h5>
                 </div>
                 <h6 className="card-subtitle mb-2 text-muted">{location}, {address}</h6>
 
@@ -49,11 +57,11 @@ const VenueCard = (props) => {
                         <Button variant="primary" size="sm" onClick={getVenueInfo}>Details</Button>{' '}
                     </Link>
                     {
-                        isDelete === true ?
+                            auth.user.role === 'dealer' || auth.user.role === 'admin' ?
+                            <>
+                            <Button variant="primary" size="sm" onClick={() => handleUpdate()}>Update</Button>
                             <Button variant="danger" size="sm" onClick={() => handleDeleteVenue()}>Delete</Button>
-                            :
-                            auth.user.role === 'dealer' ?
-                                <></>
+                            </>
                                 :
                                 <Button variant="danger" size="sm" onClick={() => setBookingModalShow(true)}>Book</Button>
                     }
@@ -67,6 +75,10 @@ const VenueCard = (props) => {
                         show={bookingModalShow}
                         ownerId={ownerId}
                         onHide={() => setBookingModalShow(false)}
+                    />
+                    <UpdateVenueModel
+                        show={showUpdateVenueModal}
+                        onHide={()=> setShowUpdateVenueModal(false)}
                     />
                 </div>
             </div>

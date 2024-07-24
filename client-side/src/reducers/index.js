@@ -8,6 +8,7 @@ import getOwnerVenuesReducer from './ownerVenues.reducers';
 import addVenueReducer from './addVenue.reducers';
 import dealsReducer from './dealsHistory.reducers';
 import serverReducer from './server.reducers';
+import updateVenueReducer from './updateVenue.reducers';
 
 const rootReducer = combineReducers({
     auth: authReducer,
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
     oneVenueInfo: oneVenueInfoReducer,
     ownerVenues: getOwnerVenuesReducer,
     addVenueStatus: addVenueReducer,
+    updateVenueStatus: updateVenueReducer,
     deals: dealsReducer,
     serverStatus: serverReducer
 });

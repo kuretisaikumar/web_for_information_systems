@@ -37,7 +37,7 @@ const createVenue = (req, res) => {
         ownerInfo: ownerInfo
     });
     venue.save((error, _venue) => {
-        if (error) return res.status(400).json({ msg: `While saving venue omething went wrong`, error });
+        if (error) return res.status(400).json({ msg: `While saving venue something went wrong`, error });
         if (_venue) return res.status(201).json({ _venue, files: req.files });
     })
 }
@@ -96,6 +96,21 @@ const deleteVenueById = (req, res) => {
     })
 }
 
+const updateVenue = async (req, res) => {
+    try{
+        const { venueId } = req.params;
+        const venue = await Venue.findByIdAndUpdate(venueId, req.body, { new: true});
+        if (!venue) {
+            return res.status(404).send({ error: 'Venue not found' });
+        }
+        res.send(venue);
+    }catch (error) {
+        res.status(400).send(error);
+    }
+
+
+}
+
 module.exports = {
     createVenue,
     getVenueByVenueId,
@@ -103,4 +118,5 @@ module.exports = {
     getAllVenues,
     checkAvailability,
     deleteVenueById,
+    updateVenue
 }

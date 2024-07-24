@@ -15,7 +15,13 @@ const Signin = () => {
     const [DealerModalShow, setDealerModalShow] = useState(false);
 
     const auth = useSelector(state => state.auth);
+    console.log(auth.authenticate,"CHECK AUTHHH",auth.authenticate?.user?.role === 'admin');
+    if(auth?.user?.role === 'admin'){
+        console.log("CHECKING ADMIN IS THERE")
+        return <Redirect to={'/dashboard'} />
+    }
     if (auth.authenticate) {
+        console.log("CHECKING USERRR");
         return <Redirect to={'/'} />
     }
 

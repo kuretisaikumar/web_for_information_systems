@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import Layout from '../components/Layout/index.layout';
+import { Redirect } from 'react-router-dom';
 import { Container, Spinner } from 'react-bootstrap';
 import VenueCard from '../components/UI/VenueCard';
 import { useDispatch, useSelector } from 'react-redux';
 import { getVenues } from '../actions/venue.actions';
 import { getPublicURL } from '../urlConfig';
 import { isEmpty } from '../helpers/isObjEmpty';
+import { userInfo } from '../actions/userInfo.actions';
 
 function Home() {
     document.title = "Booking.in | Home";
@@ -16,6 +18,12 @@ function Home() {
     useEffect(() => {
         dispatch(getVenues());
     }, []);
+
+    if(auth.user.role === 'admin'){
+        const { _id, role } = auth.user;
+        dispatch(userInfo(_id, role));
+        return <Redirect to={'/dashboard'} />
+    }
 
     if (allVenuesInfo.loading) {
         return (
